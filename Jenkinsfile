@@ -1,34 +1,14 @@
 pipeline{
-    agent{
-        label "jenkins-agent-node-14"
-    }
+    agent any
+
     stages{
-        stage("Install dependencies"){
-            steps{
-                sh "npm ci"
+        stage('Deploy') {
+            steps {
+                sh '''
+                    oc project airalgerie-virt-deploy-strategies
+                    oc start-build greeting-service --follow --wait
+                '''
             }
         }
-
-        stage("Check Style"){
-            steps{
-                sh "npm run lint"
-            }
-        }
-
-        stage("Test"){
-            steps{
-                sh "npm test"
-            }
-        }
-
-       stage('Deploy') {
-          steps {
-            sh '''
-              oc project airalgerie-virt-greetings
-              oc start-build greeting-service --follow --wait
-        '''
-    }
-}
-
     }
 }
