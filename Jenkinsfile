@@ -21,6 +21,14 @@ pipeline{
             }
         }
 
-        // Add the "Deploy" stage here
+       stage('Deploy') {
+          steps {
+            sh '''
+              oc project airalgerie-virt-greetings
+              oc start-build greeting-service --follow --wait
+        '''
+    }
+}
+
     }
 }
